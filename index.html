@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IngressosFácil - Cadastro</title>
+
+  <!-- Bootstrap 5 (CDN) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f5f6f8;
+    }
+    .card-cadastro {
+      max-width: 560px;
+      margin: 40px auto;
+    }
+    .logo {
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra do topo -->
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <span class="navbar-brand logo mb-0 h1">🎟️ IngressosFácil</span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card card-cadastro shadow-sm">
+      <div class="card-body p-4">
+
+        <h1 class="h4 mb-1">Criar minha conta</h1>
+        <p class="text-muted mb-4">
+          Preencha os dados abaixo para comprar ingressos mais rápido.
+        </p>
+
+        <!-- Alerta de sucesso: começa escondido e aparece pelo JavaScript -->
+        <div id="alertaSucesso" class="alert alert-success d-none" role="alert">
+          <h2 class="h6 alert-heading">Cadastro realizado com sucesso!</h2>
+          <p class="mb-0" id="dadosCadastro"></p>
+        </div>
+
+        <!-- Formulário de cadastro -->
+        <form id="formCadastro" novalidate>
+
+          <!-- Nome -->
+          <div class="mb-3">
+            <label for="nome" class="form-label">Nome completo</label>
+            <input
+              type="text"
+              class="form-control"
+              id="nome"
+              placeholder="Ex.: Maria Silva">
+            <div class="invalid-feedback" id="erroNome"></div>
+          </div>
+
+          <!-- E-mail -->
+          <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="voce@email.com">
+            <div class="invalid-feedback" id="erroEmail"></div>
+          </div>
+
+          <!-- Senha -->
+          <div class="mb-3">
+            <label for="senha" class="form-label">Senha</label>
+            <input
+              type="password"
+              class="form-control"
+              id="senha"
+              placeholder="Mínimo de 6 caracteres">
+            <div class="form-text">Use pelo menos 6 caracteres.</div>
+            <div class="invalid-feedback" id="erroSenha"></div>
+          </div>
+
+          <!-- Categoria -->
+          <div class="mb-3">
+            <label for="categoria" class="form-label">Categoria favorita</label>
+            <select class="form-select" id="categoria">
+              <option value="">Escolha uma categoria...</option>
+              <option value="Shows">Shows</option>
+              <option value="Teatro">Teatro</option>
+              <option value="Cinema">Cinema</option>
+              <option value="Esportes">Esportes</option>
+            </select>
+            <div class="invalid-feedback" id="erroCategoria"></div>
+          </div>
+
+          <!-- Termos de uso -->
+          <div class="mb-4 form-check">
+            <input type="checkbox" class="form-check-input" id="termos">
+            <label class="form-check-label" for="termos">
+              Li e aceito os termos de uso
+            </label>
+            <div class="invalid-feedback" id="erroTermos"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">
+            Cadastrar
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------------------------------------------------------------
+    // 1. Pegando os elementos da página (manipulação do DOM)
+    // ---------------------------------------------------------------
+    const formulario = document.getElementById('formCadastro');
+    const campoNome = document.getElementById('nome');
+    const campoEmail = document.getElementById('email');
+    const campoSenha = document.getElementById('senha');
+    const campoCategoria = document.getElementById('categoria');
+    const campoTermos = document.getElementById('termos');
+
+    const alertaSucesso = document.getElementById('alertaSucesso');
+    const dadosCadastro = document.getElementById('dadosCadastro');
+
+    // ---------------------------------------------------------------
+    // 2. Funções auxiliares para mostrar e limpar os erros
+    // ---------------------------------------------------------------
+    function mostrarErro(campo, idMensagem, mensagem) {
+      campo.classList.add('is-invalid');
+      document.getElementById(idMensagem).textContent = mensagem;
+    }
+
+    function limparErros() {
+      const invalidos = document.querySelectorAll('.is-invalid');
+      invalidos.forEach(function (elemento) {
+        elemento.classList.remove('is-invalid');
+      });
+    }
+
+    // ---------------------------------------------------------------
+    // 3. Validação dos campos
+    // ---------------------------------------------------------------
+    function validarFormulario() {
+      let valido = true;
+
+      // Nome: obrigatório e com pelo menos 3 letras
+      if (campoNome.value.trim().length < 3) {
+        mostrarErro(campoNome, 'erroNome', 'Digite seu nome completo (mínimo de 3 letras).');
+        valido = false;
+      }
+
+      // E-mail: obrigatório e precisa ter @ e ponto
+      const email = campoEmail.value.trim();
+      if (email === '') {
+        mostrarErro(campoEmail, 'erroEmail', 'O e-mail é obrigatório.');
+        valido = false;
+      } else if (!email.includes('@') || !email.includes('.')) {
+        mostrarErro(campoEmail, 'erroEmail', 'Digite um e-mail válido, como voce@email.com.');
+        valido = false;
+      }
+
+      // Senha: mínimo de 6 caracteres
+      if (campoSenha.value.length < 6) {
+        mostrarErro(campoSenha, 'erroSenha', 'A senha precisa ter pelo menos 6 caracteres.');
+        valido = false;
+      }
+
+      // Categoria: precisa escolher uma opção
+      if (campoCategoria.value === '') {
+        mostrarErro(campoCategoria, 'erroCategoria', 'Escolha uma categoria.');
+        valido = false;
+      }
+
+      // Termos: precisa estar marcado
+      if (!campoTermos.checked) {
+        mostrarErro(campoTermos, 'erroTermos', 'É preciso aceitar os termos de uso.');
+        valido = false;
+      }
+
+      return valido;
+    }
+
+    // ---------------------------------------------------------------
+    // 4. Envio do formulário (sem recarregar a página)
+    // ---------------------------------------------------------------
+    formulario.addEventListener('submit', function (evento) {
+      evento.preventDefault(); // impede o recarregamento da página
+
+      limparErros();
+      alertaSucesso.classList.add('d-none');
+
+      if (!validarFormulario()) {
+        return; // tem erro: para por aqui e mostra as mensagens
+      }
+
+      // 5. Dados lidos dos campos e agrupados em um objeto
+      const usuario = {
+        nome: campoNome.value.trim(),
+        email: campoEmail.value.trim(),
+        senha: campoSenha.value,
+        categoria: campoCategoria.value,
+        aceitouTermos: campoTermos.checked
+      };
+
+      console.log('Objeto com os dados do cadastro:', usuario);
+
+      // 6. Alerta verde na tela (sem mostrar a senha)
+      dadosCadastro.innerHTML =
+        'Nome: <strong>' + usuario.nome + '</strong><br>' +
+        'E-mail: <strong>' + usuario.email + '</strong><br>' +
+        'Categoria favorita: <strong>' + usuario.categoria + '</strong>';
+
+      alertaSucesso.classList.remove('d-none');
+
+      // 7. Limpa o formulário depois do cadastro
+      formulario.reset();
+
+      // Leva a tela até o alerta
+      alertaSucesso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // Enquanto o usuário corrige um campo, o erro dele some
+    const campos = [campoNome, campoEmail, campoSenha, campoCategoria, campoTermos];
+    campos.forEach(function (campo) {
+      campo.addEventListener('input', function () {
+        campo.classList.remove('is-invalid');
+      });
+    });
+  </script>
+
+</body>
+</html>
