@@ -45,7 +45,11 @@
         <!-- Alerta de sucesso: começa escondido e aparece pelo JavaScript -->
         <div id="alertaSucesso" class="alert alert-success d-none" role="alert">
           <h2 class="h6 alert-heading">Cadastro realizado com sucesso!</h2>
-          <p class="mb-0" id="dadosCadastro"></p>
+          <p class="mb-0">
+            Nome: <strong id="alertaNome"></strong><br>
+            E-mail: <strong id="alertaEmail"></strong><br>
+            Categoria favorita: <strong id="alertaCategoria"></strong>
+          </p>
         </div>
 
         <!-- Formulário de cadastro -->
@@ -128,7 +132,9 @@
     const campoTermos = document.getElementById('termos');
 
     const alertaSucesso = document.getElementById('alertaSucesso');
-    const dadosCadastro = document.getElementById('dadosCadastro');
+    const alertaNome = document.getElementById('alertaNome');
+    const alertaEmail = document.getElementById('alertaEmail');
+    const alertaCategoria = document.getElementById('alertaCategoria');
 
     // ---------------------------------------------------------------
     // 2. Funções auxiliares para mostrar e limpar os erros
@@ -213,10 +219,10 @@
       console.log('Objeto com os dados do cadastro:', usuario);
 
       // 6. Alerta verde na tela (sem mostrar a senha)
-      dadosCadastro.innerHTML =
-        'Nome: <strong>' + usuario.nome + '</strong><br>' +
-        'E-mail: <strong>' + usuario.email + '</strong><br>' +
-        'Categoria favorita: <strong>' + usuario.categoria + '</strong>';
+      //    textContent coloca o valor como texto puro (mais seguro que innerHTML)
+      alertaNome.textContent = usuario.nome;
+      alertaEmail.textContent = usuario.email;
+      alertaCategoria.textContent = usuario.categoria;
 
       alertaSucesso.classList.remove('d-none');
 
