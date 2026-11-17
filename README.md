@@ -14,4 +14,3 @@ Atividade extra da Aula 14 (Manipulação do DOM) — Desenvolvimento Front-End 
 ## Arquivos
 
 - `index.html` — a página de cadastro
-- `cadastro.html` — mesma página, para o endereço `/cadastro.html`
